@@ -15,7 +15,7 @@ class CardWidget:
 
     def __init__(self, parent):
         self.frame = ttk.Frame(parent, **self.PROPERTIES)
-        self.frame.pack(side="left")
+        self.frame.pack(side='left')
         self.value = None
 
 
@@ -100,24 +100,24 @@ class MainWidow:
         self.table_frame = ttk.Frame(self.root, padding=PADDING)
         self.table_frame.pack()
         table_label = ttk.Label(self.table_frame, text="Table:", padding=PADDING)
-        table_label.pack(side="left")
+        table_label.pack(side='left')
         self.card_widgets = [CardWidget(self.table_frame) for _ in range(5)]
 
         self.cards_frame = ttk.Frame(self.root, padding=PADDING)
         cards_label = ttk.Label(self.cards_frame, text="Your cards:", padding=PADDING)
-        cards_label.pack(side="left")
+        cards_label.pack(side='left')
         self.my_card_widgets = [CardWidget(self.cards_frame) for _ in range(2)]
         self.cards_frame.pack()
         self.buttons_frame = ttk.Frame(self.root)
         self.buttons_frame.pack()
         self.deal_button = ttk.Button(self.buttons_frame, text="Deal", command=self.deal)
-        self.deal_button.pack(side="left")
+        self.deal_button.pack(side='left')
 
         self.check_button = ttk.Button(self.buttons_frame, text="Check", command=self.check)
-        self.check_button.pack(side="left")
+        self.check_button.pack(side='left')
 
         self.check_button = ttk.Button(self.buttons_frame, text="Check", command=self.check)
-        self.check_button.pack(side="left")
+        self.check_button.pack(side='left')
 
     def serve(self):
         self.settings_window.withdraw()

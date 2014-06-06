@@ -4,6 +4,7 @@ import gui
 players = {}
 players_lock = threading.RLock()
 
+
 class Player:
     def __init__(self, transport, username):
         self.net_transport = transport
