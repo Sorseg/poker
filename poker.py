@@ -1,9 +1,9 @@
 import logging
 import gui
 import async
+import threading
 logging.basicConfig(level=logging.DEBUG)
 
-
-async.loop.run_in_executor(async.executor, gui.main)
+threading.Thread(target=gui.main, name="Main GUI thread").start()
 async.loop.run_forever()
 

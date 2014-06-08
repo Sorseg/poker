@@ -1,12 +1,10 @@
 import asyncio
-import concurrent.futures
 import json
 import logging
 import logic
 
 PORT = 12321
 loop = asyncio.get_event_loop()
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
 
 class Server(asyncio.Protocol):
@@ -45,11 +43,6 @@ def coroutine_create_server():
 def create_server():
     loop.call_soon_threadsafe(asyncio.Task,
                               coroutine_create_server())
-
-
-def run(app):
-    loop.run_in_executor(executor, app)
-    loop.run_forever()
 
 
 def stop():

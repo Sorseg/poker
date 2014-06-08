@@ -4,6 +4,7 @@ import ttk
 import async
 
 PADDING = (5, 5, 5, 5)
+window = None
 
 
 class CardWidget:
@@ -30,7 +31,7 @@ def widget_descriptor(name):
 
 
 class PlayerWidget:
-    def __init__(self, parent):
+    def __init__(self, parent, username, stack):
         self.parent = parent
         self.frame = ttk.Frame(parent, borderwidth=1, relief='raised')
         self.name_label = ttk.Label(self.frame, text="Player")
@@ -43,9 +44,12 @@ class PlayerWidget:
         for w in [self.name_label, self.stack_label, self.bet_label, self.cards_frame]:
             w.pack()
 
+        self.name = username
+        self.stack = stack
+
     bet = widget_descriptor('bet_label')
     stack = widget_descriptor('stack_label')
-    name = widget_descriptor('name')
+    name = widget_descriptor('name_label')
 
     @property
     def cards(self):
@@ -62,12 +66,12 @@ class MainWidow:
         self.root = tkinter.Tk()
         self.server = None
         self.show_settings_window()
-        self.root.protocol('WM_DELETE_WINDOW', async.stop)
+        self.root.protocol('WM_DELETE_WINDOW', self.close)
 
     def show_settings_window(self):
         self.settings_window = tkinter.Toplevel(self.root)
 
-        self.settings_window.protocol('WM_DELETE_WINDOW', self.root.destroy)
+        self.settings_window.protocol('WM_DELETE_WINDOW', self.close)
         self.root.withdraw()
 
         login_label = ttk.Label(self.settings_window, text="Name:")
@@ -88,11 +92,11 @@ class MainWidow:
         connect.grid(row=2, column=0)
         serve.grid(row=3, column=0)
 
-    def take_a_seat(self):
-        return PlayerWidget(self.opponents_frame)
+    def take_a_seat(self, username, stack):
+        return PlayerWidget(self.opponents_frame, username, stack)
 
     def make_board(self):
-        self.status = ttk.Label(self.root)
+        self.status = ttk.Label(self.root, padding=PADDING)
         self.status.pack()
         self.opponents_frame = ttk.Frame(self.root, padding=PADDING)
         self.opponents_frame.pack()
@@ -108,7 +112,7 @@ class MainWidow:
         cards_label.pack(side='left')
         self.my_card_widgets = [CardWidget(self.cards_frame) for _ in range(2)]
         self.cards_frame.pack()
-        self.buttons_frame = ttk.Frame(self.root)
+        self.buttons_frame = ttk.Frame(self.root, padding=PADDING)
         self.buttons_frame.pack()
         self.deal_button = ttk.Button(self.buttons_frame, text="Deal", command=self.deal)
         self.deal_button.pack(side='left')
@@ -116,8 +120,11 @@ class MainWidow:
         self.check_button = ttk.Button(self.buttons_frame, text="Check", command=self.check)
         self.check_button.pack(side='left')
 
-        self.check_button = ttk.Button(self.buttons_frame, text="Check", command=self.check)
-        self.check_button.pack(side='left')
+        self.bet_button = ttk.Button(self.buttons_frame, text="Bet", command=self.bet)
+        self.bet_button.pack(side='left')
+
+        self.fold_button = ttk.Button(self.buttons_frame, text="Fold", command=self.fold)
+        self.fold_button.pack(side='left')
 
     def serve(self):
         self.settings_window.withdraw()
@@ -125,6 +132,10 @@ class MainWidow:
         async.create_server()
         self.make_board()
         self.status['text'] = 'Waiting for players...'
+
+    def close(self):
+        async.stop()
+        self.root.after(0, self.root.destroy)
 
     def connect(self):
         pass
@@ -135,11 +146,18 @@ class MainWidow:
     def check(self):
         pass
 
+    def bet(self):
+        pass
 
-window = MainWidow()
+    def fold(self):
+        pass
 
 
 def main():
+    global window
+    window = MainWidow()
     logging.info("Starting tkinter")
     window.root.mainloop()
+    window.close()
     logging.info("Tkinter stopped")
+    del window  # without this tcl is deleted in wrong thread
