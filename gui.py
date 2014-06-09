@@ -138,7 +138,7 @@ class MainWidow:
         self.root.after(0, self.root.destroy)
 
     def connect(self):
-        pass
+        async.create_client(self.login_input['text'], self.address_input['text'])
 
     def deal(self):
         pass
