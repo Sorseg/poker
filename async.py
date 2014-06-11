@@ -57,7 +57,7 @@ def create_client(username, host):
             self.send_message({'username': username})
 
         def send_message(self, msg):
-            self.transport.send(json.dumps(msg).encode())
+            self.transport.write(json.dumps(msg).encode())
 
         def data_received(self, data):
             messages.put_nowait(json.loads(data))
@@ -68,7 +68,3 @@ def create_client(username, host):
         logging.info("Connected! {}".format(conn))
 
     loop.call_soon_threadsafe(asyncio.Task, connect_coroutine(host, PORT))
-
-
-
-

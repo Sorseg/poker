@@ -80,7 +80,7 @@ class MainWidow:
 
         address_label = ttk.Label(self.settings_window, text="Address:")
         self.address_input = ttk.Entry(self.settings_window)
-        self.address_input.insert(0, "sorseg.ru")
+        self.address_input.insert(0, "127.0.0.1")
 
         connect = ttk.Button(self.settings_window, text="Connect", command=self.connect)
         serve = ttk.Button(self.settings_window, text="Serve", command=self.serve)
@@ -138,7 +138,7 @@ class MainWidow:
         self.root.after(0, self.root.destroy)
 
     def connect(self):
-        async.create_client(self.login_input['text'], self.address_input['text'])
+        async.create_client(self.login_input.get(), self.address_input.get())
 
     def deal(self):
         pass
